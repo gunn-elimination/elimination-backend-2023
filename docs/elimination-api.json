@@ -1,0 +1,232 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "OpenAPI definition",
+    "version": "v0"
+  },
+  "servers": [
+    {
+      "url": "http://localhost:8080",
+      "description": "Generated server url"
+    }
+  ],
+  "paths": {
+    "/me": {
+      "get": {
+        "tags": [
+          "user"
+        ],
+        "operationId": "me",
+        "parameters": [
+          {
+            "name": "user",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/EliminationAuthentication"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/EliminationUser"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/me/": {
+      "get": {
+        "tags": [
+          "user"
+        ],
+        "operationId": "me_1",
+        "parameters": [
+          {
+            "name": "user",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/EliminationAuthentication"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/EliminationUser"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/game/scoreboard": {
+      "get": {
+        "tags": [
+          "scoreboard-controller"
+        ],
+        "operationId": "scoreboard",
+        "parameters": [
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 20
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/Scoreboard"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/game/eliminate": {
+      "get": {
+        "tags": [
+          "player-controller"
+        ],
+        "operationId": "eliminate",
+        "parameters": [
+          {
+            "name": "me",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/EliminationAuthentication"
+            }
+          },
+          {
+            "name": "code",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/game/code": {
+      "get": {
+        "tags": [
+          "player-controller"
+        ],
+        "operationId": "code",
+        "parameters": [
+          {
+            "name": "user",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/EliminationAuthentication"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "EliminationAuthentication": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          }
+        }
+      },
+      "EliminationUser": {
+        "type": "object",
+        "properties": {
+          "subject": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string"
+          },
+          "forename": {
+            "type": "string"
+          },
+          "surname": {
+            "type": "string"
+          },
+          "targettedBy": {
+            "$ref": "#/components/schemas/EliminationUser"
+          },
+          "target": {
+            "$ref": "#/components/schemas/EliminationUser"
+          },
+          "eliminatedBy": {
+            "$ref": "#/components/schemas/EliminationUser"
+          },
+          "eliminated": {
+            "type": "boolean"
+          },
+          "roles": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Role"
+            }
+          },
+          "eliminationCode": {
+            "type": "string"
+          }
+        }
+      },
+      "Role": {
+        "type": "object"
+      },
+      "Scoreboard": {
+        "type": "object",
+        "properties": {
+          "users": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/EliminationUser"
+            }
+          }
+        }
+      }
+    }
+  }
+}

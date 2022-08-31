@@ -29,7 +29,6 @@ public class PlayerController {
    }
 
    @GetMapping("/eliminate")
-   @PostMapping("/eliminate")
    public void eliminate(@AuthenticationPrincipal EliminationAuthentication me, @RequestParam("code") String code) throws IncorrectEliminationCodeException, EmptyGameException {
 	  eliminationManager.attemptElimination(me.user(), code);
    }

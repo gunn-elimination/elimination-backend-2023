@@ -1,0 +1,39 @@
+elimination:
+  words: src/main/resources/sgb-words.txt
+  words-per-code: 3
+  registration-deadline: 2022-09-30T00:00
+  game-start-time: 2022-08-31T00:00
+  game-end-time: 2022-09-30T00:00
+  admins: alecthechop@gmail.com
+
+#logging:
+#  level:
+#    root: debug
+
+spring:
+  security:
+    oauth2:
+      client:
+        registration:
+          google:
+            clientId: 522005424537-7ue8vvn3vkckv7tsqqbqm3cdrqf0414a.apps.googleusercontent.com
+            clientSecret: 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
+            scope:
+              - email
+              - profile
+            redirect-uri: http://localhost:8080/login/oauth2/code/google
+            authorization-grant-type: authorization_code
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+  datasource:
+    url: jdbc:postgresql://localhost:5432/postgres
+    username: postgres
+    password: postgres
+server:
+  error:
+    include-message: always
+    include-exception: false
+    include-binding-errors: never
+    include-stacktrace: never

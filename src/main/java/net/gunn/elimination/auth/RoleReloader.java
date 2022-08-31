@@ -12,35 +12,35 @@ import java.io.IOException;
 
 @Service
 class RoleReloader implements Filter {
-   private final UserRepository userRepository;
+    private final UserRepository userRepository;
 
-   public RoleReloader(UserRepository userRepository) {
-	  this.userRepository = userRepository;
-   }
+    public RoleReloader(UserRepository userRepository) {
+        this.userRepository = userRepository;
+    }
 
-   @Override
-   public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
-	  var ctx = SecurityContextHolder.getContext();
+    @Override
+    public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
+        var ctx = SecurityContextHolder.getContext();
 
-	  if (ctx.getAuthentication().getPrincipal() instanceof EliminationOauthAuthenticationImpl currentUser) {
-		 var oldAuth = ((OAuth2AuthenticationToken) ctx.getAuthentication());
-		 var updatedUser = userRepository.findBySubject(currentUser.getSubject()).orElseThrow();
-		 var newAuth = new EliminationOauthAuthenticationImpl(updatedUser, currentUser.original());
-		 var token = new OAuth2AuthenticationToken(newAuth, newAuth.getAuthorities(), oldAuth.getAuthorizedClientRegistrationId());
-		 ctx.setAuthentication(token);
-	  }
+        if (ctx.getAuthentication().getPrincipal() instanceof EliminationOauthAuthenticationImpl currentUser) {
+            var oldAuth = ((OAuth2AuthenticationToken) ctx.getAuthentication());
+            var updatedUser = userRepository.findBySubject(currentUser.getSubject()).orElseThrow();
+            var newAuth = new EliminationOauthAuthenticationImpl(updatedUser, currentUser.original());
+            var token = new OAuth2AuthenticationToken(newAuth, newAuth.getAuthorities(), oldAuth.getAuthorizedClientRegistrationId());
+            ctx.setAuthentication(token);
+        }
 
-	  chain.doFilter(request, response);
-   }
+        chain.doFilter(request, response);
+    }
 
-   @Autowired
-   void setupRoles(RoleRepository roleRepository) {
-	  if (!roleRepository.existsByName(Roles.USER.name()))
-		 roleRepository.save(Roles.USER);
-	  if (!roleRepository.existsByName(Roles.PLAYER.name()))
-		 roleRepository.save(Roles.PLAYER);
-	  if (!roleRepository.existsByName(Roles.ADMIN.name()))
-		 roleRepository.save(Roles.ADMIN);
+    @Autowired
+    void setupRoles(RoleRepository roleRepository) {
+        if (!roleRepository.existsByName(Roles.USER.name()))
+            roleRepository.save(Roles.USER);
+        if (!roleRepository.existsByName(Roles.PLAYER.name()))
+            roleRepository.save(Roles.PLAYER);
+        if (!roleRepository.existsByName(Roles.ADMIN.name()))
+            roleRepository.save(Roles.ADMIN);
 
-   }
+    }
 }

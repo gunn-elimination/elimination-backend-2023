@@ -19,33 +19,33 @@ import org.springframework.security.web.SecurityFilterChain;
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(securedEnabled = true, prePostEnabled = true)
 class WebSecurityConfig {
-   private final EliminationUserService userDetailsService;
+    private final EliminationUserService userDetailsService;
 
-   public WebSecurityConfig(EliminationUserService userDetailsService) {
-	  this.userDetailsService = userDetailsService;
-   }
+    public WebSecurityConfig(EliminationUserService userDetailsService) {
+        this.userDetailsService = userDetailsService;
+    }
 
-   @Bean
-   protected SecurityFilterChain webSecurityCustomizer(HttpSecurity http) throws Exception {
-	  return http.authorizeRequests().anyRequest().permitAll().and().oauth2Login().userInfoEndpoint(n -> n.oidcUserService(userDetailsService)).and().build();
-   }
+    @Bean
+    protected SecurityFilterChain webSecurityCustomizer(HttpSecurity http) throws Exception {
+        return http.authorizeRequests().anyRequest().permitAll().and().oauth2Login().userInfoEndpoint(n -> n.oidcUserService(userDetailsService)).and().build();
+    }
 
-   @Bean
-   public ClientRegistrationRepository clientRegistrationRepository(
-		   @Value("${spring.security.oauth2.client.registration.google.clientId}") String clientId,
-		   @Value("${spring.security.oauth2.client.registration.google.clientSecret}") String clientSecret
-   ) {
-	  return new InMemoryClientRegistrationRepository(
-			  CommonOAuth2Provider
-					  .GOOGLE
-					  .getBuilder("google")
-					  .redirectUri("{baseUrl}/login/oauth2/code/google")
-					  .userNameAttributeName(IdTokenClaimNames.SUB)
-					  .clientId(clientId)
-					  .clientSecret(clientSecret)
-					  .build()
-	  );
-   }
+    @Bean
+    public ClientRegistrationRepository clientRegistrationRepository(
+            @Value("${spring.security.oauth2.client.registration.google.clientId}") String clientId,
+            @Value("${spring.security.oauth2.client.registration.google.clientSecret}") String clientSecret
+    ) {
+        return new InMemoryClientRegistrationRepository(
+                CommonOAuth2Provider
+                        .GOOGLE
+                        .getBuilder("google")
+                        .redirectUri("{baseUrl}/login/oauth2/code/google")
+                        .userNameAttributeName(IdTokenClaimNames.SUB)
+                        .clientId(clientId)
+                        .clientSecret(clientSecret)
+                        .build()
+        );
+    }
 
   /* @Configuration
    static class RoleReloaderConfig {

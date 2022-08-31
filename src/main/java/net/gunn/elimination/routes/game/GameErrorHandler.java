@@ -15,27 +15,27 @@ import static net.gunn.elimination.auth.Roles.USER;
 
 @ControllerAdvice(basePackages = "net.gunn.elimination.routes.game")
 public class GameErrorHandler {
-   private final EliminationManager eliminationManager;
+    private final EliminationManager eliminationManager;
 
-   public GameErrorHandler(EliminationManager eliminationManager) {
-	  this.eliminationManager = eliminationManager;
-   }
+    public GameErrorHandler(EliminationManager eliminationManager) {
+        this.eliminationManager = eliminationManager;
+    }
 
-   @ExceptionHandler(AccessDeniedException.class)
-   public void handleAccessDeniedException(HttpServletResponse response) throws IOException {
-	  if (!eliminationManager.gameHasStarted())
-		 response.sendError(HttpServletResponse.SC_FORBIDDEN, "Game has not yet started");
-	  else if (eliminationManager.gameHasEnded())
-		 response.sendError(HttpServletResponse.SC_FORBIDDEN, "Game has ended");
-	  else if (!SecurityContextHolder.getContext().getAuthentication().getAuthorities().contains(new SimpleGrantedAuthority(USER.name()))
-			  && eliminationManager.gameIsOngoing()) {
-		 response.sendRedirect("/oauth2/authorization/google");
-	  } else if (!eliminationManager.gameHasEnoughPlayers())
-		 response.sendError(HttpServletResponse.SC_FORBIDDEN, "Game does not have enough players to have started");
-	  else if (!SecurityContextHolder.getContext().getAuthentication().getAuthorities().contains(new SimpleGrantedAuthority(PLAYER.name())))
-		 response.sendError(HttpServletResponse.SC_FORBIDDEN, "You are not a player");
+    @ExceptionHandler(AccessDeniedException.class)
+    public void handleAccessDeniedException(HttpServletResponse response) throws IOException {
+        if (!eliminationManager.gameHasStarted())
+            response.sendError(HttpServletResponse.SC_FORBIDDEN, "Game has not yet started");
+        else if (eliminationManager.gameHasEnded())
+            response.sendError(HttpServletResponse.SC_FORBIDDEN, "Game has ended");
+        else if (!SecurityContextHolder.getContext().getAuthentication().getAuthorities().contains(new SimpleGrantedAuthority(USER.name()))
+                && eliminationManager.gameIsOngoing()) {
+            response.sendRedirect("/oauth2/authorization/google");
+        } else if (!eliminationManager.gameHasEnoughPlayers())
+            response.sendError(HttpServletResponse.SC_FORBIDDEN, "Game does not have enough players to have started");
+        else if (!SecurityContextHolder.getContext().getAuthentication().getAuthorities().contains(new SimpleGrantedAuthority(PLAYER.name())))
+            response.sendError(HttpServletResponse.SC_FORBIDDEN, "You are not a player");
 
-	  else
-		 response.sendError(HttpServletResponse.SC_FORBIDDEN, "Access denied");
-   }
+        else
+            response.sendError(HttpServletResponse.SC_FORBIDDEN, "Access denied");
+    }
 }

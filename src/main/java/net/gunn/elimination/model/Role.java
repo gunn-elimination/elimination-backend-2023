@@ -5,35 +5,35 @@ import java.util.Collection;
 
 @Entity
 public class Role {
-   @Column
-   @Id
-   private String name;
+    @Column
+    @Id
+    private String name;
 
-   public Role() {
+    public Role() {
 
-   }
+    }
 
-   public String name() {
-      return name;
-   }
-
-   public Role(String name) {
-      this.name = name;
-   }
-
-   @Override
-   public String toString() {
+    public String name() {
         return name;
-   }
+    }
 
-   @Override
-   public boolean equals(Object obj) {
-      return obj instanceof Role && ((Role) obj).name.equals(name);
-   }
+    public Role(String name) {
+        this.name = name;
+    }
 
-   @Override
-   public int hashCode() {
+    @Override
+    public String toString() {
+        return name;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        return obj instanceof Role && ((Role) obj).name.equals(name);
+    }
+
+    @Override
+    public int hashCode() {
         return name.hashCode();
-   }
+    }
 }
 

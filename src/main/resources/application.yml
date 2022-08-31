@@ -4,13 +4,21 @@ elimination:
   registration-deadline: 2022-09-30T00:00
   game-start-time: 2022-08-31T00:00
   game-end-time: 2022-09-30T00:00
-  admins: alecthechop@gmail.com
+  admins:
+    - alecthechop@gmail.com
+    - ap40132@pausd.us
+
 
 #logging:
 #  level:
 #    root: debug
 
 spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/postgres
+    username: postgres
+    password: postgres
+
   security:
     oauth2:
       client:
@@ -26,11 +34,7 @@ spring:
 
   jpa:
     hibernate:
-      ddl-auto: update
-  datasource:
-    url: jdbc:postgresql://localhost:5432/postgres
-    username: postgres
-    password: postgres
+      ddl-auto: create
 server:
   error:
     include-message: always

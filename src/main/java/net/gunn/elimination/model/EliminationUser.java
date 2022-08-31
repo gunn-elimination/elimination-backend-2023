@@ -1,21 +1,14 @@
 package net.gunn.elimination.model;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.oauth2.core.oidc.OidcIdToken;
-import org.springframework.security.oauth2.core.oidc.OidcUserInfo;
-import org.springframework.security.oauth2.core.oidc.user.OidcUser;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.util.*;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.stream.Collectors;
 
 @Entity
 /**
@@ -25,105 +18,111 @@ import java.util.stream.Collectors;
  * have to do a bunch of extra work to get the session info.
  */
 public class EliminationUser implements Serializable {
-   @Id
-   @Column(columnDefinition = "TEXT")
-   private String subject;
+    @Id
+    @Column(columnDefinition = "TEXT")
+    @JsonIgnore
+    private String subject;
 
-   @Column
-   @JsonProperty
-   private String email;
+    @Column
+    @JsonProperty
+    private String email;
 
-   @Column
-   @JsonProperty
-   private String forename, surname;
+    @Column
+    @JsonProperty
+    private String forename, surname;
 
-   @OneToOne(mappedBy = "target", fetch = FetchType.LAZY)
-   private EliminationUser targettedBy;
+    @OneToOne(mappedBy = "target", fetch = FetchType.LAZY)
+    @JsonIgnore
+    private EliminationUser targettedBy;
 
-   @OneToOne
-   private EliminationUser target;
+    @OneToOne
+    @JsonIgnore
+    private EliminationUser target;
 
-   @ManyToOne
-   private EliminationUser eliminatedBy;
+    @ManyToOne
+    @JsonIgnore
+    private EliminationUser eliminatedBy;
 
-   @OneToMany(mappedBy = "eliminatedBy", fetch = FetchType.EAGER)
-   @JsonProperty
-   private Set<EliminationUser> eliminated = ConcurrentHashMap.newKeySet();
+    @OneToMany(mappedBy = "eliminatedBy", fetch = FetchType.EAGER)
+    @JsonProperty
+    private Set<EliminationUser> eliminated = ConcurrentHashMap.newKeySet();
 
-   @ManyToMany(fetch = FetchType.EAGER)
-   private Collection<Role> roles = ConcurrentHashMap.newKeySet();
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JsonIgnore
+    private Collection<Role> roles = ConcurrentHashMap.newKeySet();
 
-   @Column
-   private String eliminationCode;
+    @Column
+    @JsonIgnore
+    private String eliminationCode;
 
-   public EliminationUser() {
-   }
+    public EliminationUser() {
+    }
 
 
-   public String getSubject() {
-	  return subject;
-   }
+    public EliminationUser(String subject, String email, String forename, String surname, String eliminationCode, Set<Role> roles
+    ) {
+        this.subject = subject;
+        this.email = email;
+        this.forename = forename;
+        this.surname = surname;
+        this.eliminationCode = eliminationCode;
+        this.roles = roles == null ? ConcurrentHashMap.newKeySet() : roles;
+    }
 
-   public String getEmail() {
-	  return email;
-   }
+    public String getSubject() {
+        return subject;
+    }
 
-   public String getForename() {
-	  return forename;
-   }
+    public String getEmail() {
+        return email;
+    }
 
-   public String getSurname() {
-	  return surname;
-   }
+    public String getForename() {
+        return forename;
+    }
 
-   public Collection<Role> getRoles() {
-	  return roles;
-   }
+    public String getSurname() {
+        return surname;
+    }
 
-   public EliminationUser getTarget() {
-	  return target;
-   }
+    public Collection<Role> getRoles() {
+        return roles;
+    }
 
-   public void setTarget(EliminationUser target) {
-	  this.target = target;
-   }
+    public EliminationUser getTarget() {
+        return target;
+    }
 
-   public void setTargettedBy(EliminationUser targettedBy) {
-	  this.targettedBy = targettedBy;
-   }
+    public void setTarget(EliminationUser target) {
+        this.target = target;
+    }
 
-   public String getEliminationCode() {
-	  return eliminationCode;
-   }
+    public void setTargettedBy(EliminationUser targettedBy) {
+        this.targettedBy = targettedBy;
+    }
 
-   public boolean isEliminated() {
-	  assert (target == null && targettedBy == null && eliminationCode == null) || (target != null && targettedBy != null && eliminationCode != null);
+    public String getEliminationCode() {
+        return eliminationCode;
+    }
 
-	  return eliminatedBy != null;
-   }
+    public boolean isEliminated() {
+        assert (target == null && targettedBy == null && eliminationCode == null) || (target != null && targettedBy != null && eliminationCode != null);
 
-   public void setEliminatedBy(EliminationUser eliminatedBy) {
-	  this.eliminatedBy = eliminatedBy;
-   }
+        return eliminatedBy != null;
+    }
 
-   public EliminationUser(String subject, String email, String forename, String surname, String eliminationCode, Set<Role> roles
-   ) {
-	  this.subject = subject;
-	  this.email = email;
-	  this.forename = forename;
-	  this.surname = surname;
-	  this.eliminationCode = eliminationCode;
-	  this.roles = roles == null ? ConcurrentHashMap.newKeySet() : roles;
-   }
+    public void setEliminatedBy(EliminationUser eliminatedBy) {
+        this.eliminatedBy = eliminatedBy;
+    }
 
-   public boolean addRole(Role role) {
-	  this.roles = new HashSet<>(this.roles);
-	  return this.roles.add(role);
-   }
+    public boolean addRole(Role role) {
+        this.roles = new HashSet<>(this.roles);
+        return this.roles.add(role);
+    }
 
-   public void removeRole(Role role) {
-	  this.roles = new HashSet<>(this.roles) {{
-		 remove(role);
-	  }};
-   }
+    public void removeRole(Role role) {
+        this.roles = new HashSet<>(this.roles) {{
+            remove(role);
+        }};
+    }
 }

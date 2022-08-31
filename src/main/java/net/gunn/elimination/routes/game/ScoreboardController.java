@@ -16,18 +16,19 @@ import java.util.List;
 @RequestMapping("/game")
 @PreAuthorize("@eliminationManager.gameIsOngoing()")
 public class ScoreboardController {
-   private final UserRepository userRepository;
+    private final UserRepository userRepository;
 
-   public ScoreboardController(UserRepository userRepository) {
-	  this.userRepository = userRepository;
-   }
+    public ScoreboardController(UserRepository userRepository) {
+        this.userRepository = userRepository;
+    }
 
-   @GetMapping("/scoreboard")
-   @Transactional
-   public Scoreboard scoreboard(@RequestParam(defaultValue = "20") int limit) {
-	  limit = Math.min(Math.max(limit, 0), 100);
-	  return new Scoreboard(userRepository.findTopByNumberOfEliminations().limit(limit).toList());
-   }
+    @GetMapping("/scoreboard")
+    @Transactional
+    public Scoreboard scoreboard(@RequestParam(defaultValue = "20") int limit) {
+        limit = Math.min(Math.max(limit, 0), 100);
+        return new Scoreboard(userRepository.findTopByNumberOfEliminations().limit(limit).toList());
+    }
 
-   public record Scoreboard(@JsonProperty List<EliminationUser> users) {}
+    public record Scoreboard(@JsonProperty List<EliminationUser> users) {
+    }
 }

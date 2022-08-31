@@ -28,12 +28,12 @@ public class GameErrorHandler {
         else if (eliminationManager.gameHasEnded())
             response.sendError(HttpServletResponse.SC_FORBIDDEN, "Game has ended");
         else if (!SecurityContextHolder.getContext().getAuthentication().getAuthorities().contains(new SimpleGrantedAuthority(USER.name()))
-                && eliminationManager.gameIsOngoing()) {
+            && eliminationManager.gameIsOngoing()) {
             response.sendRedirect("/oauth2/authorization/google");
         } else if (!eliminationManager.gameHasEnoughPlayers())
             response.sendError(HttpServletResponse.SC_FORBIDDEN, "Game does not have enough players to have started");
         else if (!SecurityContextHolder.getContext().getAuthentication().getAuthorities().contains(new SimpleGrantedAuthority(PLAYER.name())))
-            response.sendError(HttpServletResponse.SC_FORBIDDEN, "You are not a player");
+            response.sendError(HttpServletResponse.SC_FORBIDDEN, "You have been eliminated");
 
         else
             response.sendError(HttpServletResponse.SC_FORBIDDEN, "Access denied");

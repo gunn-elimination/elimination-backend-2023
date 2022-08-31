@@ -3,6 +3,7 @@ package net.gunn.elimination;
 import net.gunn.elimination.model.EliminationUser;
 import net.gunn.elimination.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.context.properties.ConfigurationPropertiesScan;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -17,6 +18,7 @@ import static net.gunn.elimination.auth.Roles.PLAYER;
 
 @Service
 @Transactional
+@ConfigurationPropertiesScan
 public class EliminationManager {
     @PersistenceContext
     private final EntityManager entityManager;
@@ -24,11 +26,12 @@ public class EliminationManager {
     private final UserRepository userRepository;
 
     private final Instant gameStartTime, gameEndTime;
+
     public EliminationManager(
-            UserRepository userRepository,
-            EntityManager entityManager,
-            @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm") @Value("${elimination.game-start-time}") LocalDateTime  gameStartTime,
-            @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm") @Value("${elimination.game-end-time}") LocalDateTime  gameEndTime
+        UserRepository userRepository,
+        EntityManager entityManager,
+        @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm") @Value("${elimination.game-start-time}") LocalDateTime gameStartTime,
+        @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm") @Value("${elimination.game-end-time}") LocalDateTime gameEndTime
     ) {
         this.userRepository = userRepository;
         this.entityManager = entityManager;
@@ -39,8 +42,8 @@ public class EliminationManager {
 
     public void attemptElimination(EliminationUser eliminator, String code) throws IncorrectEliminationCodeException, EmptyGameException {
         var expectedCode = entityManager.createQuery("SELECT u.target.eliminationCode from EliminationUser u WHERE u.subject = :subject", String.class)
-                .setParameter("subject", eliminator.getSubject())
-                .getResultList();
+            .setParameter("subject", eliminator.getSubject())
+            .getResultList();
         if (expectedCode.isEmpty())
             throw new EmptyGameException("User is the last man standing");
 

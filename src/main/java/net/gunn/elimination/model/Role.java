@@ -1,7 +1,8 @@
 package net.gunn.elimination.model;
 
-import javax.persistence.*;
-import java.util.Collection;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
 
 @Entity
 public class Role {
@@ -13,12 +14,12 @@ public class Role {
 
     }
 
-    public String name() {
-        return name;
-    }
-
     public Role(String name) {
         this.name = name;
+    }
+
+    public String name() {
+        return name;
     }
 
     @Override

@@ -12,8 +12,8 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/me")
 @PreAuthorize("!isAnonymous()")
 public class User {
-   @GetMapping({"/", ""})
-   public EliminationUser me(@AuthenticationPrincipal EliminationAuthentication user) {
-	  return user.user();
-   }
+    @GetMapping({"/", ""})
+    public EliminationUser me(@AuthenticationPrincipal EliminationAuthentication user) {
+        return user.user();
+    }
 }

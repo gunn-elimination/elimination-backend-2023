@@ -22,4 +22,10 @@ class EliminationOauthAuthenticationImpl extends DefaultOidcUser implements Elim
     public OidcUser original() {
         return original;
     }
+
+    @Override
+    public String getName() {
+        return user.getForename() + " " + user.getSurname();
+    }
+
 }

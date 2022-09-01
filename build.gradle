@@ -19,13 +19,16 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
 	implementation 'org.springframework.boot:spring-boot-starter-security'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
-	implementation 'org.springdoc:springdoc-openapi-ui:1.6.11'
-	developmentOnly 'org.springframework.boot:spring-boot-devtools'
-	runtimeOnly 'org.postgresql:postgresql'
-	testImplementation 'org.springframework.boot:spring-boot-starter-test'
-	testImplementation 'org.springframework.security:spring-security-test'
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    testImplementation 'org.springframework.security:spring-security-test'
+    developmentOnly 'org.springframework.boot:spring-boot-devtools'
+    annotationProcessor "org.springframework.boot:spring-boot-configuration-processor"
 
-	annotationProcessor "org.springframework.boot:spring-boot-configuration-processor"
+    implementation 'org.springdoc:springdoc-openapi-ui:1.6.11'
+	runtimeOnly 'org.postgresql:postgresql'
+
+    implementation 'org.thymeleaf:thymeleaf'
+    implementation 'org.thymeleaf:thymeleaf-spring5'
 }
 
 tasks.named('test') {

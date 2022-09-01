@@ -1,0 +1,19 @@
+<span th:text="'hello ' + ${currentUser}"></span>
+<br/>
+<td>
+    <div th:if="${eliminationManager.gameIsOngoing() && !currentUser.isEliminated()}">
+        <span th:text="'Your current target is ' + ${currentUser.getTarget()}"/>
+        <br/>
+        <span th:text="'Your elimination code is ' + ${currentUser.getEliminationCode()}"/>
+        <form action="/game/eliminate" method="get">
+            <input type="text" name="code" placeholder="enter elimination code"/>
+            <input type="submit" value="eliminate"/>
+        </form>
+    </div>
+    <h1 th:if="${currentUser.isEliminated()}" th:text="'you have been eliminated by ' + ${currentUser.getEliminatedBy()}"></h1>
+    <h1 th:if="${currentUser.isWinner()}" th:text="'you won!!'"></h1>
+    <span th:unless="${eliminationManager.gameIsOngoing()}" th:text="'Game hasn\'t started yet'"></span>
+
+</td>
+
+<iframe src="game/scoreboard" width="100%" height="100%" frameborder="0"></iframe>

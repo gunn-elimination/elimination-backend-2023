@@ -21,6 +21,6 @@ spring:
 server:
     error:
         include-message: always
-        include-exception: false
+        include-exception: true
         include-binding-errors: never
-        include-stacktrace: never
+        include-stacktrace: always

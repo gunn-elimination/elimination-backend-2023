@@ -60,6 +60,12 @@ public class EliminationManager {
         var eliminator = entityManager.find(EliminationUser.class, eliminatorSubject);
         eliminator.setTarget(toEliminate.getTarget());
         eliminator.getTarget().setTargettedBy(eliminator);
+
+        if (eliminator.getTarget().equals(eliminator)) {
+            eliminator.setTarget(null);
+            eliminator.setTargettedBy(null);
+            eliminator.setWinner(true);
+        }
         userRepository.save(eliminator);
 
         toEliminate.setTarget(null);
@@ -82,6 +88,6 @@ public class EliminationManager {
     }
 
     public boolean gameIsOngoing() {
-        return gameHasStarted() && !gameHasEnded() && gameHasEnoughPlayers();
+        return gameHasStarted() && !gameHasEnded() && gameHasEnoughPlayers() && userRepository.findByWinnerTrue().isEmpty();
     }
 }

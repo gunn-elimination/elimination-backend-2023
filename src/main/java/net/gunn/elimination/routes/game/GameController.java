@@ -7,10 +7,8 @@ import net.gunn.elimination.auth.EliminationAuthentication;
 import net.gunn.elimination.model.EliminationUser;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.ModelAndView;
 
 
 @RestController
@@ -26,14 +24,16 @@ public class GameController {
     /**
      * @apiNote Gets the current user's elimination code.
      */
-    @GetMapping("/code")
+    @GetMapping(value = "/code", produces = "application/json")
     public String code(@AuthenticationPrincipal EliminationAuthentication user) {
         return user.user().getEliminationCode();
     }
 
     @GetMapping("/eliminate")
-    public void eliminate(@AuthenticationPrincipal EliminationAuthentication me, @RequestParam("code") String code) throws IncorrectEliminationCodeException, EmptyGameException {
+    @PostMapping("/eliminate")
+    public String eliminate(@AuthenticationPrincipal EliminationAuthentication me, @RequestParam("code") String code) throws IncorrectEliminationCodeException, EmptyGameException {
         eliminationManager.attemptElimination(me.user(), code);
+        return "Eliminated";
     }
 
     @GetMapping("/target")

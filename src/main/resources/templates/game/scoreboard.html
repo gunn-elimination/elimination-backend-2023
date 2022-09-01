@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>scoreboard</title>
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+</head>
+<body>
+
+<table>
+    <tr>
+        <td>Email</td>
+        <td>Forename</td>
+        <td>Surname</td>
+        <td>Number of eliminations</td>
+    </tr>
+
+    <tr th:each="user : ${scoreboard.users()}">
+        <td><p th:text="${user.getEmail()}"/></td>
+        <td><p th:text="${user.getForename()}"/></td>
+        <td><p th:text="${user.getSurname()}"/></td>
+        <td><p th:text="${user.getEliminated().size()}"/></td>
+    </tr>
+</table>
+</body>
+</html>

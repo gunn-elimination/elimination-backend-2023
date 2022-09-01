@@ -47,6 +47,25 @@ public class EliminationUser implements Serializable {
     @JsonProperty
     private Set<EliminationUser> eliminated = ConcurrentHashMap.newKeySet();
 
+    @Column
+    private Boolean winner = false;
+
+    public boolean isWinner() {
+        return winner;
+    }
+
+    public void setWinner(boolean winner) {
+        this.winner = winner;
+    }
+
+    public Set<EliminationUser> getEliminated() {
+        return eliminated;
+    }
+
+    public EliminationUser getEliminatedBy() {
+        return eliminatedBy;
+    }
+
     @ManyToMany(fetch = FetchType.EAGER)
     @JsonIgnore
     private Collection<Role> roles = ConcurrentHashMap.newKeySet();
@@ -124,5 +143,10 @@ public class EliminationUser implements Serializable {
         this.roles = new HashSet<>(this.roles) {{
             remove(role);
         }};
+    }
+
+    @Override
+    public String toString() {
+        return getForename() + " " + getSurname() + " (" + getEmail() + ")";
     }
 }

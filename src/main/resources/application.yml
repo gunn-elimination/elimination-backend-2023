@@ -1,5 +1,5 @@
 elimination:
-    words: src/main/resources/sgb-words.txt
+    words: classpath:sgb-words.txt
     words-per-code: 3
     registration-deadline: 2022-09-30T00:00
     game-start-time: 2022-08-31T00:00
@@ -12,6 +12,7 @@ spring:
         url: jdbc:postgresql://localhost:5432/postgres
         username: postgres
         password: postgres
+
 
     jpa:
         hibernate:

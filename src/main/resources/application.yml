@@ -13,10 +13,15 @@ spring:
         username: postgres
         password: postgres
 
-
     jpa:
         hibernate:
-            ddl-auto: create # recreate the database schema on startup (all previous data are lost)
+            ddl-auto: update # recreate the database schema on startup (all previous data are lost)
+    thymeleaf: # Thymeleaf
+        cache: false
+        mode: HTML
+        encoding: UTF-8
+        prefix: file:src/main/resources/templates/
+
 
 server:
     error:

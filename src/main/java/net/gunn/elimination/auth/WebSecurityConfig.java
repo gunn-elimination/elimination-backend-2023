@@ -44,6 +44,7 @@ class WebSecurityConfig {
             .oauth2Login(n -> n.userInfoEndpoint().oidcUserService(userDetailsService))
             .headers().frameOptions().sameOrigin()
             .and()
+            .csrf().disable()
             .build();
     }
 

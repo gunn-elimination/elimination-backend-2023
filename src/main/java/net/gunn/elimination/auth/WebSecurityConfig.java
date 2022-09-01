@@ -11,6 +11,7 @@ import org.springframework.security.oauth2.client.registration.ClientRegistratio
 import org.springframework.security.oauth2.client.registration.InMemoryClientRegistrationRepository;
 import org.springframework.security.oauth2.core.oidc.IdTokenClaimNames;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
 
 @Configuration
 @EnableWebSecurity
@@ -24,7 +25,16 @@ class WebSecurityConfig {
 
     @Bean
     protected SecurityFilterChain webSecurityCustomizer(HttpSecurity http) throws Exception {
-        return http.authorizeRequests().anyRequest().permitAll().and().oauth2Login().userInfoEndpoint(n -> n.oidcUserService(userDetailsService)).and().build();
+        return http
+            .authorizeRequests()
+            .anyRequest()
+            .permitAll()
+            .and()
+            .oauth2Login()
+            .userInfoEndpoint(n -> n.oidcUserService(userDetailsService))
+            .successHandler(new SimpleUrlAuthenticationSuccessHandler() {{ setUseReferer(true); }})
+            .and()
+            .build();
     }
 
     @Bean
@@ -44,17 +54,4 @@ class WebSecurityConfig {
         );
     }
 
-  /* @Configuration
-   static class RoleReloaderConfig {
-	  private final RoleReloader roleReloader;
-
-	  RoleReloaderConfig(RoleReloader roleReloader) {
-		 this.roleReloader = roleReloader;
-	  }
-
-	  @Autowired
-	  protected void installRoleReloader(@Autowired HttpSecurity http) {
-		 http.addFilterAfter(roleReloader, SwitchUserFilter.class);
-	  }
-   }*/
 }

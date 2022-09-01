@@ -32,15 +32,4 @@ class RoleReloader implements Filter {
 
         chain.doFilter(request, response);
     }
-
-    @Autowired
-    void setupRoles(RoleRepository roleRepository) {
-        if (!roleRepository.existsByName(Roles.USER.name()))
-            roleRepository.save(Roles.USER);
-        if (!roleRepository.existsByName(Roles.PLAYER.name()))
-            roleRepository.save(Roles.PLAYER);
-        if (!roleRepository.existsByName(Roles.ADMIN.name()))
-            roleRepository.save(Roles.ADMIN);
-
-    }
 }

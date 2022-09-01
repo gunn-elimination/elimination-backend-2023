@@ -16,10 +16,10 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/game")
 @PreAuthorize("@eliminationManager.gameIsOngoing() && hasRole('ROLE_PLAYER')")
-public class PlayerController {
+public class GameController {
     public final EliminationManager eliminationManager;
 
-    public PlayerController(EliminationManager eliminationManager) {
+    public GameController(EliminationManager eliminationManager) {
         this.eliminationManager = eliminationManager;
     }
 

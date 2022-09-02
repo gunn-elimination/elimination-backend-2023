@@ -36,3 +36,4 @@ server:
         include-exception: true
         include-binding-errors: never
         include-stacktrace: always
+    port: ${PORT:8080}

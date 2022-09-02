@@ -10,6 +10,7 @@ import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+import java.util.Scanner;
 
 @Component
 class EliminationCodeGenerator {
@@ -19,7 +20,12 @@ class EliminationCodeGenerator {
     private final int wordsPerCode;
 
     public EliminationCodeGenerator(@Value("${elimination.words}") Resource wordFile, @Value("${elimination.words-per-code}") int wordsPerCode) throws IOException {
-        this.words = Files.lines(wordFile.getFile().toPath()).toList();
+        try (var scanner = new Scanner(wordFile.getInputStream())) {
+            this.words = new ArrayList<>();
+            while (scanner.hasNextLine()) {
+                words.add(scanner.nextLine());
+            }
+        }
         this.wordsPerCode = wordsPerCode;
     }
 

@@ -8,6 +8,10 @@
 
 <body>
 
+<div th:if="${winner != null}">
+    <h1>Winner: <span style="color: gold" th:text="${winner}"></span></h1>
+</div>
+
 <div style="background-color: lightgreen; display: grid; place-items: center; width: 100%" th:if="${eliminationManager.gameIsOngoing() && !currentUser.isEliminated()}">
     <table>
         <tr style="flex: 1; display: flex; margin-bottom: 20px">

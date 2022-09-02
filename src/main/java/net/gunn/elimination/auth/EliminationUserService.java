@@ -63,7 +63,7 @@ class EliminationUserService implements OAuth2UserService<OidcUserRequest, OidcU
     public EliminationOauthAuthenticationImpl loadUser(OidcUserRequest userRequest) throws OAuth2AuthenticationException {
         OidcUser oidcUser = delegate.loadUser(userRequest);
         if (!isValidEmail(oidcUser.getEmail()))
-            throw new OAuth2AuthenticationException("Only PAUSD student emails are allowed");
+            throw new IllegalArgumentException("Only PAUSD student emails are allowed");
 
         try {
             return processOidcUser(oidcUser);

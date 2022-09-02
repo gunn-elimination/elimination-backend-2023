@@ -39,12 +39,12 @@ public class Announcement {
     }
     
     public Announcement() {}
-    public Announcement (String title, String body, Date startDate, Date endDate) {
+    public Announcement (String title, String body, Date startDate, Date endDate, boolean active) {
         this.title = title;
         this.body = body;
         this.startDate = startDate;
         this.endDate = endDate;
-        this.active = true;
+        this.active = active;
     }
     
     public String getTitle() {
@@ -53,7 +53,43 @@ public class Announcement {
     public String getBody() {
         return body;
     }
-    public String getStartDate() {
-        return startDate.toString();
+    public Date getStartDate() {
+        return startDate;
+    }
+
+    public Date getEndDate() {
+        return endDate;
+    }
+
+    public long getID() {
+        return id;
+    }
+
+    public void setID(Long id) {
+        this.id = id;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public void setBody(String body) {
+        this.body = body;
+    }
+
+    public void setStartDate(Date startDate) {
+        this.startDate = startDate;
+    }
+
+    public void setEndDate(Date endDate) {
+        this.endDate = endDate;
+    }
+
+    public void setActive(boolean active) {
+        this.active = active;
+    }
+
+    public boolean shouldDisplayToNonAdmins() {
+        return active && startDate.before(new Date(System.currentTimeMillis())) && endDate.after(new Date(System.currentTimeMillis()));
     }
 }

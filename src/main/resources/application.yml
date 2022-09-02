@@ -6,7 +6,7 @@ elimination:
     game-end-time: 2022-09-30T00:00
     admins:
         - alecthechop@gmail.com
-        - ap40132@pausd.us
+#        - ap40132@pausd.us
 spring:
     datasource:
         url: jdbc:postgresql://localhost:5432/postgres
@@ -21,6 +21,7 @@ spring:
         mode: HTML
         encoding: UTF-8
         prefix: file:src/main/resources/templates/
+
 
 
 server:

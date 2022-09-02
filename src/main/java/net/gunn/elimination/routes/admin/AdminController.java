@@ -21,15 +21,47 @@ public class AdminController {
     }
 
     @PostMapping("/announcement")
-    public void announcement(HttpServletRequest req, HttpServletResponse response, @RequestParam("title") String title, @RequestParam("body") String body, @RequestParam long startTimeEpoch, @RequestParam long endTimeEpoch) throws IOException {
+    public void announcement(
+        HttpServletRequest req,
+        HttpServletResponse response,
+        @RequestParam("title") String title,
+        @RequestParam("body") String body,
+        @RequestParam long startTimeEpoch,
+        @RequestParam long endTimeEpoch,
+        @RequestParam boolean active
+    ) throws IOException {
         if (announcementRepository.existsByTitle(title)) {
             response.sendError(HttpServletResponse.SC_CONFLICT, "Announcement with name " + title + " already exists.");
             return;
         }
 
-        var announcement = new Announcement(title, body, new Date(startTimeEpoch), new Date(endTimeEpoch));
+        var announcement = new Announcement(title, body, new Date(startTimeEpoch * 1000), new Date(endTimeEpoch * 1000), active);
         announcementRepository.save(announcement);
         response.setStatus(HttpServletResponse.SC_CREATED);
+        response.sendRedirect(req.getHeader("Referer"));
+    }
+
+    @PostMapping("/announcement/{id}")
+    public void announcement(
+        HttpServletRequest req,
+        HttpServletResponse response,
+        @PathVariable("id") long id,
+        @RequestParam("title") String title,
+        @RequestParam("body") String body,
+        @RequestParam long startTimeEpoch,
+        @RequestParam long endTimeEpoch,
+        @RequestParam boolean active
+    ) throws IOException {
+        var announcement = announcementRepository.findById(id).orElseThrow();
+        announcement.setTitle(title);
+        announcement.setBody(body);
+        announcement.setStartDate(new Date(startTimeEpoch * 1000));
+        announcement.setEndDate(new Date(endTimeEpoch * 1000));
+        announcement.setActive(active);
+        announcementRepository.deleteById(id);
+        announcementRepository.save(announcement);
+
+        response.setStatus(HttpServletResponse.SC_OK);
         response.sendRedirect(req.getHeader("Referer"));
     }
 }

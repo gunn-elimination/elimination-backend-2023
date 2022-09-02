@@ -1,31 +1,51 @@
 <html>
 
 <head>
+
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
     <script type="module" src="https://md-block.verou.me/md-block.js"></script>
 </head>
 
 <body>
-<span th:text="'hello ' + ${currentUser}"></span>
-<br/>
-<td>
-    <div th:if="${eliminationManager.gameIsOngoing() && !currentUser.isEliminated()}">
-        <span th:text="'Your current target is ' + ${currentUser.getTarget()}"/>
-        <br/>
-        <span th:text="'Your elimination code is ' + ${currentUser.getEliminationCode()}"/>
+
+<div style="background-color: lightgreen; display: grid; place-items: center; width: 100%" th:if="${eliminationManager.gameIsOngoing() && !currentUser.isEliminated()}">
+    <table>
+        <tr style="flex: 1; display: flex; margin-bottom: 20px">
+            <td style="font-size: xxx-large; text-align: left; padding-right: 1em">
+                <u>Your</u> current target
+            </td>
+            <td style="font-size: xxx-large; text-align: right; flex: 1; color: red; font-family: sans-serif; " th:text="${currentUser.getTarget()}">
+            </td>
+        </tr>
+
+        <tr style="flex: 1; display: flex;  margin-bottom: 20px    ;">
+            <td style="font-size: xxx-large; padding-right: 1em; text-align: left;" th:text="'Elimination code'"></td>
+            <td style="font-size: xxx-large; text-align: left;  color: red; font-family: sans-serif; justify-content: right " th:text="${currentUser.getEliminationCode()}"></td>
+        </tr>
+
+        <tr>
+            <td style="flex: 1; display: flex;  margin-bottom: 20px    ;">
+                <label  style="padding-right: 1em; text-align: left;"  for="eliminationCode">Caught your target?  Enter the code displayed on his/her screen here:</label>
         <form action="/game/eliminate" method="get">
-            <input type="text" name="code" placeholder="enter elimination code"/>
+            <input type="text" id="eliminationCode" name="code" placeholder="enter elimination code"/>
             <input type="submit" value="eliminate"/>
         </form>
-    </div>
-    <h1 th:if="${currentUser.isEliminated()}" th:text="'you have been eliminated by ' + ${currentUser.getEliminatedBy()}"></h1>
-    <h1 th:if="${currentUser.isWinner()}" th:text="'you won!!'"></h1>
-    <div th:unless="${eliminationManager.gameIsOngoing()}">
-        <span th:if="${eliminationManager.gameHasEnded()}" th:text="'Game over'"></span>
-        <span th:unless="${eliminationManager.gameHasEnded()}" th:text="'Game not ongoing'"></span>
+            </td>
+        </tr>
+    </table>
 
-    </div>
-</td>
+</div>
 
+
+
+<h1 th:if="${currentUser.isEliminated()}"
+    th:text="'you have been eliminated by ' + ${currentUser.getEliminatedBy()}"></h1>
+<h1 th:if="${currentUser.isWinner()}" th:text="'you won!!'"></h1>
+<div th:unless="${eliminationManager.gameIsOngoing()}">
+    <span th:if="${eliminationManager.gameHasEnded()}" th:text="'Game over'"></span>
+    <span th:unless="${eliminationManager.gameHasEnded()}" th:text="'Game not ongoing'"></span>
+
+</div>
 
 
 <td th:if="${roles.contains('ROLE_ADMIN')}">
@@ -40,26 +60,84 @@
             <textarea name="body" placeholder="body"></textarea>
         </label>
         <label>
-            Start time (epoch millis):
+            Start time (epoch seconds):
             <input type="text" name="startTimeEpoch" placeholder="start time"/>
         </label>
         <label>
-            End time (epoch millis):
+            End time (epoch seconds):
             <input type="text" name="endTimeEpoch" placeholder="end time"/>
+        </label>
+        <label>
+            Is active (announcement shows only if after start time AND before end time AND is active):
+            <input type="checkbox" checked name="active"/>
         </label>
         <input type="submit" value="post announcement"/>
 
 
     </form>
 </td>
+
+<table class="fancy">
+    <tbody>
+    <tr>
+        <td>Email</td>
+        <td>Forename</td>
+        <td>Surname</td>
+        <td>Number of eliminations</td>
+    </tr>
+
+    <tr th:each="user : ${scoreboard.users()}">
+        <td><p th:text="${user.getEmail()}"/></td>
+        <td><p th:text="${user.getForename()}"/></td>
+        <td><p th:text="${user.getSurname()}"/></td>
+        <td><p th:text="${user.getEliminated().size()}"/></td>
+    </tr>
+    </tbody>
+</table>
+
 <hr/>
 <h1>Announcements:</h1>
 <div th:each="announcement : ${announcements}">
-    <h1 th:text="'Title:  ' + ${announcement.getTitle()}"></h1>
+    <form method="post" th:if="${roles.contains('ROLE_ADMIN')}" th:id="${announcement.getID()}"
+          th:action="'/admin/announcement/' + ${announcement.getID()}"></form>
+
+    <td>
+        <h1 th:style="${announcement.shouldDisplayToNonAdmins() ? '' : 'text-decoration: line-through'}"
+            th:text="'Title:  ' + ${announcement.getTitle()}"></h1>
+
+        <h3 th:if="${!announcement.shouldDisplayToNonAdmins()} " th:style="'color: #A0A0A0'">[not shown to users]</h3>
+    </td>
+
+    <label th:if="${roles.contains('ROLE_ADMIN')}">
+        Title:
+        <input name="title" th:form="${announcement.getID()}" th:value="${announcement.getTitle()}"></input>
+    </label>
     <h3 th:text="'Published:  ' + ${announcement.getStartDate()}"></h3>
+    <label th:if="${roles.contains('ROLE_ADMIN')}">
+        Start time (epoch seconds):
+        <input name="startTimeEpoch" th:form="${announcement.getID()}"
+               th:value="${announcement.getStartDate().getTime() / 1000}"></input>
+    </label>
+    <label th:if="${roles.contains('ROLE_ADMIN')}">
+        End time (epoch seconds):
+        <input name="endTimeEpoch" th:form="${announcement.getID()}"
+               th:value="${announcement.getEndDate().getTime() / 1000}"></input>
+    </label>
     <md-block th:text="${announcement.getBody()}"></md-block>
+    <label th:if="${roles.contains('ROLE_ADMIN')}">
+        Body:
+        <textarea name="body" th:form="${announcement.getID()}" th:text="${announcement.getBody()}"></textarea>
+    </label>
+    <label th:if="${roles.contains('ROLE_ADMIN')}">
+        Submit:
+        <input type="submit" th:form="${announcement.getID()}"/>
+    </label>
+    <label th:if="${roles.contains('ROLE_ADMIN')}">
+        Is active (announcement shows only if after start time AND before end time AND is active):
+        <input type="checkbox" checked name="active"/>
+    </label>
     <hr/>
 </div>
 <hr/>
-<iframe src="game/scoreboard" width="100%" height="100%" frameborder="0"></iframe>
-</body></html>
+</body>
+</html>

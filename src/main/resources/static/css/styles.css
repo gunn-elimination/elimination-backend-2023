@@ -1,3 +1,11 @@
-td, th, table {
+table.fancy {
     border: 2px solid darkblue;
+    text-align: center;
 }
+
+tbody tr td {
+    border: inherit;
+    vertical-align: middle;
+    text-align: center;
+}
+

@@ -7,7 +7,8 @@
 </head>
 <body>
 <h1>Scoreboard</h1>
-<table>
+<table class="fancy">
+    <tbody>
     <tr>
         <td>Email</td>
         <td>Forename</td>
@@ -21,6 +22,7 @@
         <td><p th:text="${user.getSurname()}"/></td>
         <td><p th:text="${user.getEliminated().size()}"/></td>
     </tr>
+    </tbody>
 </table>
 </body>
 </html>

@@ -32,6 +32,16 @@ dependencies {
     implementation 'org.thymeleaf:thymeleaf-spring5'
 }
 
+jar {
+    manifest {
+        attributes(
+            'Class-Path': configurations.compile.collect { it.getName() }.join(' '),
+            'Main-Class': 'net.gunn.elimination.EliminationApplication'
+        )
+    }
+}
+
+
 tasks.named('test') {
 	useJUnitPlatform()
 }

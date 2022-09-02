@@ -7,7 +7,7 @@ These endpoints require the current session to be authenticated.
 #### /game/code
 Gets the current authenticated user's elimination code
 
-#### /game/eliminate?code=<code>
+#### /game/eliminate?code=\<code\>
 Attempts to eliminate the current authenticated user from the game with the given code.
 
 #### /me

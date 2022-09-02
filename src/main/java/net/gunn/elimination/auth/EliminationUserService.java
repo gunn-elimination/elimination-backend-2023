@@ -1,5 +1,6 @@
 package net.gunn.elimination.auth;
 
+import net.gunn.elimination.EliminationManager;
 import net.gunn.elimination.model.EliminationUser;
 import net.gunn.elimination.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Value;
@@ -34,6 +35,7 @@ class EliminationUserService implements OAuth2UserService<OidcUserRequest, OidcU
     private final EliminationCodeGenerator eliminationCodeGenerator;
     private final UserRepository userRepository;
     private final Instant registrationDeadline;
+    private final EliminationManager eliminationManager;
     @PersistenceContext
     private final EntityManager entityManager;
 
@@ -43,14 +45,15 @@ class EliminationUserService implements OAuth2UserService<OidcUserRequest, OidcU
         EliminationCodeGenerator eliminationCodeGenerator,
 
         AdminList admins,
-        @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm") @Value("${elimination.registration-deadline}") LocalDateTime registrationDeadline
-    ) {
+        @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm") @Value("${elimination.registration-deadline}") LocalDateTime registrationDeadline,
+        EliminationManager eliminationManager) {
         this.entityManager = entityManager;
         this.userRepository = userRepository;
         this.eliminationCodeGenerator = eliminationCodeGenerator;
 
         this.admins = admins;
         this.registrationDeadline = registrationDeadline.toInstant(ZonedDateTime.now().getOffset());
+        this.eliminationManager = eliminationManager;
 
         this.delegate = new OidcUserService();
     }
@@ -122,7 +125,9 @@ class EliminationUserService implements OAuth2UserService<OidcUserRequest, OidcU
         }
 
         userRepository.save(user);
-        insertUserRandomly(user);
+
+        if (!eliminationManager.gameHasEnded())
+            insertUserRandomly(user);
     }
 
     private EliminationOauthAuthenticationImpl processOidcUser(OidcUser oidcUser) {

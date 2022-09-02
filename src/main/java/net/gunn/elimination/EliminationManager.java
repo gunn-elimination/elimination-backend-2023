@@ -76,7 +76,7 @@ public class EliminationManager {
     }
 
     public boolean gameHasEnded() {
-        return Instant.now().isAfter(gameEndTime);
+        return Instant.now().isAfter(gameEndTime) || userRepository.findByWinnerTrue().isPresent();
     }
 
     public boolean gameHasStarted() {

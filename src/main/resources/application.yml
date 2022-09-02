@@ -10,9 +10,12 @@ elimination:
 
 spring:
     datasource:
-        url: jdbc:postgresql://localhost:5432/postgres
-        username: postgres
-        password: postgres
+#        url: jdbc:postgresql://localhost:5432/postgres
+#        username: postgres
+#        password: postgres
+        url: ${JDBC_DATABASE_URL}
+        username: ${JDBC_DATABASE_USERNAME}
+        password: ${JDBC_DATABASE_PASSWORD}
 
     jpa:
         hibernate:

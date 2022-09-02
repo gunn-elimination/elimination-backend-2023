@@ -10,6 +10,9 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+
 
 @RestController
 @RequestMapping("/game")
@@ -31,9 +34,9 @@ public class GameController {
 
     @GetMapping("/eliminate")
     @PostMapping("/eliminate")
-    public String eliminate(@AuthenticationPrincipal EliminationAuthentication me, @RequestParam("code") String code) throws IncorrectEliminationCodeException, EmptyGameException {
+    public void eliminate(HttpServletResponse response,  @AuthenticationPrincipal EliminationAuthentication me, @RequestParam("code") String code) throws IncorrectEliminationCodeException, EmptyGameException, IOException {
         eliminationManager.attemptElimination(me.user(), code);
-        return "Eliminated";
+        response.sendRedirect("/");
     }
 
     @GetMapping("/target")

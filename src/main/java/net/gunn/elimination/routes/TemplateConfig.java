@@ -55,4 +55,9 @@ public class TemplateConfig {
     public List<Announcement> announcements() {
         return announcementController.announcements();
     }
+
+    @ModelAttribute("winner")
+    public EliminationUser winner() {
+        return eliminationManager.getWinner();
+    }
 }

@@ -90,4 +90,14 @@ public class EliminationManager {
     public boolean gameIsOngoing() {
         return gameHasStarted() && !gameHasEnded() && gameHasEnoughPlayers() && userRepository.findByWinnerTrue().isEmpty();
     }
+
+    public EliminationUser getWinner() {
+        if (gameIsOngoing())
+            return null;
+        return entityManager.createQuery("SELECT u FROM EliminationUser u WHERE u.winner = true", EliminationUser.class)
+            .getResultList()
+            .stream()
+            .findFirst()
+            .orElse(null);
+    }
 }

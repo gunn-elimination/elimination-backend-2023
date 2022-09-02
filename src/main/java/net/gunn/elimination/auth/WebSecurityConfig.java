@@ -49,8 +49,7 @@ class WebSecurityConfig {
     }
 
     @Bean
-    public ClientRegistrationRepository clientRegistrationRepository(@Value("classpath:client_secret.json") Resource clientSecret, ObjectMapper mapper) throws IOException {
-        var config = mapper.readTree(clientSecret.getInputStream()).get("web");
+    public ClientRegistrationRepository clientRegistrationRepository(@Value("${elimination.client-id}") String clientId, @Value("${elimination.client-secret}") String clientSecret, ObjectMapper mapper) throws IOException {
         return new InMemoryClientRegistrationRepository(
 
             CommonOAuth2Provider
@@ -59,8 +58,8 @@ class WebSecurityConfig {
                 .authorizationGrantType(AuthorizationGrantType.AUTHORIZATION_CODE)
                 .redirectUri("{baseUrl}/login/oauth2/code/google")
                 .userNameAttributeName(IdTokenClaimNames.SUB)
-                .clientId(config.get("client_id").asText())
-                .clientSecret(config.get("client_secret").asText())
+                .clientId(clientId)
+                .clientSecret(clientSecret)
                 .build()
         );
     }

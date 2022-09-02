@@ -35,10 +35,13 @@ dependencies {
 jar {
     manifest {
         attributes(
-            'Class-Path': configurations.runtimeClasspath.files.collect { it.getName() }.join(' '),
             'Main-Class': 'net.gunn.elimination.EliminationApplication'
         )
     }
+    from {
+        configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }
+    }
+
 }
 
 

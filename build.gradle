@@ -26,6 +26,7 @@ dependencies {
 
     implementation 'org.springdoc:springdoc-openapi-ui:1.6.11'
 	runtimeOnly 'org.postgresql:postgresql'
+    runtimeOnly 'org.xerial:sqlite-jdbc:3.39.2.1'
 
     implementation 'org.thymeleaf:thymeleaf'
     implementation 'org.thymeleaf:thymeleaf-spring5'

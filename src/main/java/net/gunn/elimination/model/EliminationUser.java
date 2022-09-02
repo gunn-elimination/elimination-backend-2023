@@ -48,7 +48,7 @@ public class EliminationUser implements Serializable {
     private Set<EliminationUser> eliminated = ConcurrentHashMap.newKeySet();
 
     @Column
-    private Boolean winner = false;
+    private boolean winner = false;
 
     public boolean isWinner() {
         return winner;

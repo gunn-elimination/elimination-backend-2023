@@ -90,11 +90,11 @@
         <td>Number of eliminations</td>
     </tr>
 
-    <tr th:each="user : ${scoreboard.users()}">
-        <td><p th:text="${user.getEmail()}"/></td>
-        <td><p th:text="${user.getForename()}"/></td>
-        <td><p th:text="${user.getSurname()}"/></td>
-        <td><p th:text="${user.getEliminated().size()}"/></td>
+    <tr th:each="user : ${scoreboard.users()}" th:style="${user.isWinner() ? 'color: gold' : ''}">
+        <td><p th:text="${user.getEmail()}"></p></td>
+        <td><p th:text="${user.getForename()}"></p></td>
+        <td><p th:text="${user.getSurname()}"></p></td>
+        <td><p th:text="${user.getEliminated().size()}"></p></td>
     </tr>
     </tbody>
 </table>

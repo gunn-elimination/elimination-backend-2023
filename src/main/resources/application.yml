@@ -27,7 +27,8 @@ spring:
         mode: HTML
         encoding: UTF-8
         prefix: file:src/main/resources/templates/
-
+    session:
+        store-type: jdbc
 
 
 server:

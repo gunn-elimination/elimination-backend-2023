@@ -19,6 +19,8 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
 	implementation 'org.springframework.boot:spring-boot-starter-security'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'org.springframework.session:spring-session-jdbc'
+
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation 'org.springframework.security:spring-security-test'
     developmentOnly 'org.springframework.boot:spring-boot-devtools'
@@ -42,7 +44,11 @@ jar {
     }
 
 }
-
+dependencyManagement {
+    imports {
+        mavenBom 'org.springframework.session:spring-session-bom:2020.0.3'
+    }
+}
 
 tasks.named('test') {
 	useJUnitPlatform()

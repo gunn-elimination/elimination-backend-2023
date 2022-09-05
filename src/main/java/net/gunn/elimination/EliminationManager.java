@@ -45,7 +45,7 @@ public class EliminationManager {
             .setParameter("subject", eliminator.getSubject())
             .getResultList();
         if (expectedCode.isEmpty())
-            throw new EmptyGameException("User is the last man standing");
+            throw new EmptyGameException("Game is not ongoing");
 
         if (!expectedCode.get(0).equals(code))
             throw new IncorrectEliminationCodeException("Incorrect code");
@@ -60,17 +60,20 @@ public class EliminationManager {
         var eliminator = entityManager.find(EliminationUser.class, eliminatorSubject);
         eliminator.setTarget(toEliminate.getTarget());
         eliminator.getTarget().setTargettedBy(eliminator);
+        eliminator = userRepository.save(eliminator);
 
-        if (eliminator.getTarget().equals(eliminator)) {
+        if (eliminator.getTarget().getSubject().equals(eliminator.getSubject())) {
             eliminator.setTarget(null);
             eliminator.setTargettedBy(null);
+            eliminator.setEliminationCode(null);
             eliminator.setWinner(true);
+            eliminator = userRepository.save(eliminator);
         }
-        userRepository.save(eliminator);
 
         toEliminate.setTarget(null);
         toEliminate.setTargettedBy(null);
         toEliminate.setEliminatedBy(eliminator);
+        toEliminate.setEliminationCode(null);
         toEliminate.removeRole(PLAYER);
         userRepository.save(toEliminate);
     }

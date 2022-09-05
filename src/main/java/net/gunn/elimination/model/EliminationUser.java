@@ -58,6 +58,10 @@ public class EliminationUser implements Serializable {
         this.winner = winner;
     }
 
+    public void setEliminationCode(String eliminationCode) {
+        this.eliminationCode = eliminationCode;
+    }
+
     public Set<EliminationUser> getEliminated() {
         return eliminated;
     }
@@ -112,6 +116,14 @@ public class EliminationUser implements Serializable {
         return target;
     }
 
+    public EliminationUser getTargettedBy() {
+        return targettedBy;
+    }
+
+    public void setSubject(String subject) {
+        this.subject = subject;
+    }
+
     public void setTarget(EliminationUser target) {
         this.target = target;
     }
@@ -148,5 +160,10 @@ public class EliminationUser implements Serializable {
     @Override
     public String toString() {
         return getForename() + " " + getSurname() + " (" + getEmail() + ")";
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        return obj instanceof EliminationUser && ((EliminationUser) obj).getSubject().equals(getSubject());
     }
 }

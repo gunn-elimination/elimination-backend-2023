@@ -4,8 +4,8 @@ elimination:
     registration-deadline: 2022-09-30T00:00
     game-start-time: 2022-08-31T00:00
     game-end-time: 2022-09-30T00:00
-    client-id: ${CLIENT_ID}
-    client-secret: ${CLIENT_SECRET}
+    client-id: ${CLIENT_ID:null}
+    client-secret: ${CLIENT_SECRET:null}
     admins:
         - alecthechop@gmail.com
 #        - ap40132@pausd.us
